@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -27,8 +28,9 @@ public class SecondaryMybatisConfig {
     public SqlSessionFactory secondarySqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
-        Resource resource = new ClassPathResource("/mapper/secondary/company.xml");
-        sessionFactory.setMapperLocations(new Resource[] {resource});
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        sessionFactory.setConfigLocation(resolver.getResource("classpath:/mybatis.xml"));
+        sessionFactory.setMapperLocations(resolver.getResources("classpath:/mapper/secondary/*.xml"));
         return sessionFactory.getObject();
     }
 

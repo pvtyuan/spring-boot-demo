@@ -1,5 +1,6 @@
 package com.example.configuration.mybatis;
 
+import com.example.entity.primary.Person;
 import com.example.mapper.primary.PersonMapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -29,8 +31,9 @@ public class PrimaryMybatisConfig {
     public SqlSessionFactory primarySqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
-        Resource resource = new ClassPathResource("/mapper/primary/person.xml");
-        sessionFactory.setMapperLocations(new Resource[] {resource});
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        sessionFactory.setConfigLocation(resolver.getResource("classpath:/mybatis.xml"));
+        sessionFactory.setMapperLocations(resolver.getResources("classpath:/mapper/primary/*.xml"));
         return sessionFactory.getObject();
     }
 

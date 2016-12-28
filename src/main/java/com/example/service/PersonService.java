@@ -15,8 +15,8 @@ public class PersonService {
     @Autowired
     private PersonMapper personMapper;
 
-    public String getName(Integer id) {
-        return personMapper.getNameById(id);
+    public Person get(Integer id) {
+        return personMapper.getById(id);
     }
 
 
@@ -26,7 +26,7 @@ public class PersonService {
         person.setName("bbb");
         repository.save(person);
         if (i == 1) throw new InternalException();
-        personMapper.updateNameById(person.getId());
+        personMapper.updateNameById(person.getId(), "ddsag");
         if (i == 2 ) throw new InternalException();
         return "ok";
     }
